@@ -39,8 +39,6 @@ public class TimetableTest {
     }
 
 
-
-
     @Test
     void testGetTrainingSessionsForDayMultipleSessions() {
         Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
@@ -61,29 +59,102 @@ public class TimetableTest {
         timetable.addNewTrainingSession(thursdayChildTrainingSession);
         timetable.addNewTrainingSession(saturdayChildTrainingSession);
 
-        // Проверить, что за понедельник вернулось одно занятие
         // Проверить, что за четверг вернулось два занятия в правильном порядке: сначала в 13:00, потом в 20:00
-        // Проверить, что за вторник не вернулось занятий
     }
 
 
+    @Test
+    void shouldReturnOneMultipleSessionForMonday() {
+        Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
+        TrainingSession thursdayAdultTrainingSession = new TrainingSession(groupAdult, coach,
+                DayOfWeek.THURSDAY, new TimeOfDay(20, 0));
 
+        timetable.addNewTrainingSession(thursdayAdultTrainingSession);
 
+        Group groupChild = new Group("Акробатика для детей", Age.CHILD, 60);
+        TrainingSession mondayChildTrainingSession = new TrainingSession(groupChild, coach,
+                DayOfWeek.MONDAY, new TimeOfDay(13, 0));
+        TrainingSession thursdayChildTrainingSession = new TrainingSession(groupChild, coach,
+                DayOfWeek.THURSDAY, new TimeOfDay(13, 0));
+        TrainingSession saturdayChildTrainingSession = new TrainingSession(groupChild, coach,
+                DayOfWeek.SATURDAY, new TimeOfDay(10, 0));
 
+        timetable.addNewTrainingSession(mondayChildTrainingSession);
+        timetable.addNewTrainingSession(thursdayChildTrainingSession);
+        timetable.addNewTrainingSession(saturdayChildTrainingSession);
 
+        Assertions.assertEquals(1, timetable.getTrainingSessionsForDay(DayOfWeek.MONDAY).size());
 
-
+    }
 
     @Test
-    void testGetTrainingSessionsForDayAndTime() {
+    void shouldReturnZeroMultipleSessionForTuesday() {
+        Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
+        TrainingSession thursdayAdultTrainingSession = new TrainingSession(groupAdult, coach,
+                DayOfWeek.THURSDAY, new TimeOfDay(20, 0));
+
+        timetable.addNewTrainingSession(thursdayAdultTrainingSession);
+
+        Group groupChild = new Group("Акробатика для детей", Age.CHILD, 60);
+        TrainingSession mondayChildTrainingSession = new TrainingSession(groupChild, coach,
+                DayOfWeek.MONDAY, new TimeOfDay(13, 0));
+        TrainingSession thursdayChildTrainingSession = new TrainingSession(groupChild, coach,
+                DayOfWeek.THURSDAY, new TimeOfDay(13, 0));
+        TrainingSession saturdayChildTrainingSession = new TrainingSession(groupChild, coach,
+                DayOfWeek.SATURDAY, new TimeOfDay(10, 0));
+        Assertions.assertEquals(0, timetable.getTrainingSessionsForDayAndTime(DayOfWeek.TUESDAY,
+                new TimeOfDay(13, 0)).size());
+    }
+
+    @Test
+    void shouldReturnTwoOrderlyMultipleSessionForThursday() {
+        Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
+        TrainingSession thursdayAdultTrainingSession = new TrainingSession(groupAdult, coach,
+                DayOfWeek.THURSDAY, new TimeOfDay(20, 0));
+
+        timetable.addNewTrainingSession(thursdayAdultTrainingSession);
+
+        Group groupChild = new Group("Акробатика для детей", Age.CHILD, 60);
+        TrainingSession mondayChildTrainingSession = new TrainingSession(groupChild, coach,
+                DayOfWeek.MONDAY, new TimeOfDay(13, 0));
+        TrainingSession thursdayChildTrainingSession = new TrainingSession(groupChild, coach,
+                DayOfWeek.THURSDAY, new TimeOfDay(13, 0));
+        TrainingSession saturdayChildTrainingSession = new TrainingSession(groupChild, coach,
+                DayOfWeek.SATURDAY, new TimeOfDay(10, 0));
+
+        timetable.addNewTrainingSession(mondayChildTrainingSession);
+        timetable.addNewTrainingSession(thursdayChildTrainingSession);
+        timetable.addNewTrainingSession(saturdayChildTrainingSession);
+
+        TreeMap<TimeOfDay, ArrayList<TrainingSession>> thursdaySessions =
+                timetable.getTrainingSessionsForDay(DayOfWeek.THURSDAY);
+        NavigableSet<TimeOfDay> keySet = thursdaySessions.navigableKeySet();
+
+        Assertions.assertEquals(2, keySet.size());
+        Assertions.assertEquals(new TimeOfDay(13, 0), keySet.getFirst());
+        Assertions.assertEquals(new TimeOfDay(20, 0), keySet.getLast());
+    }
+
+    @Test
+    void shouldReturnOneMultipleSessionForMondayAt1300() {
         Group group = new Group("Акробатика для детей", Age.CHILD, 60);
         TrainingSession singleTrainingSession = new TrainingSession(group, coach,
                 DayOfWeek.MONDAY, new TimeOfDay(13, 0));
 
         timetable.addNewTrainingSession(singleTrainingSession);
+        Assertions.assertEquals(1, timetable.getTrainingSessionsForDayAndTime(DayOfWeek.MONDAY,
+                new TimeOfDay(13, 0)).size());
+    }
 
-        //Проверить, что за понедельник в 13:00 вернулось одно занятие
-        //Проверить, что за понедельник в 14:00 не вернулось занятий
+    @Test
+    void shouldReturnZeroMultipleSessionForMondayAt1400() {
+        Group group = new Group("Акробатика для детей", Age.CHILD, 60);
+        TrainingSession singleTrainingSession = new TrainingSession(group, coach,
+                DayOfWeek.MONDAY, new TimeOfDay(13, 0));
+
+        timetable.addNewTrainingSession(singleTrainingSession);
+        Assertions.assertEquals(0, timetable.getTrainingSessionsForDayAndTime(DayOfWeek.MONDAY,
+                new TimeOfDay(14, 0)).size());
     }
 
 }

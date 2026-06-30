@@ -35,11 +35,12 @@ public class Timetable {
     }
 
     public TreeMap<TimeOfDay, ArrayList<TrainingSession>> getTrainingSessionsForDay(DayOfWeek dayOfWeek) {
-        return timetable.get(dayOfWeek);
+        return timetable.containsKey(dayOfWeek) ? timetable.get(dayOfWeek) : new TreeMap<>();
     }
 
 
     public ArrayList<TrainingSession> getTrainingSessionsForDayAndTime(DayOfWeek dayOfWeek, TimeOfDay timeOfDay) {
-        return timetable.containsKey(dayOfWeek) ? timetable.get(dayOfWeek).get(timeOfDay) : new ArrayList<>();
+        return timetable.containsKey(dayOfWeek) && timetable.get(dayOfWeek).containsKey(timeOfDay) ?
+                timetable.get(dayOfWeek).get(timeOfDay) : new ArrayList<>();
     }
 }
