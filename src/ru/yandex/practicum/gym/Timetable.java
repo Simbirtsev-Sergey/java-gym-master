@@ -21,15 +21,15 @@ public class Timetable {
         TreeMap<TimeOfDay, ArrayList<TrainingSession>> sessionsForDay = timetable.get(dayOfWeek);
         if (sessionsForDay == null) {
             sessionsForDay = new TreeMap<>();
-            timetable.put(dayOfWeek, sessionsForDay);
         }
+        timetable.put(dayOfWeek, sessionsForDay);
 
         // создаём список занятий для времени, если его ещё нет
         ArrayList<TrainingSession> temp = sessionsForDay.get(timeOfDay);
         if (temp == null) {
             temp = new ArrayList<>();
-            sessionsForDay.put(timeOfDay, temp);
         }
+        sessionsForDay.put(timeOfDay, temp);
 
         temp.add(trainingSession);
     }
@@ -42,5 +42,36 @@ public class Timetable {
     public ArrayList<TrainingSession> getTrainingSessionsForDayAndTime(DayOfWeek dayOfWeek, TimeOfDay timeOfDay) {
         return timetable.containsKey(dayOfWeek) && timetable.get(dayOfWeek).containsKey(timeOfDay) ?
                 timetable.get(dayOfWeek).get(timeOfDay) : new ArrayList<>();
+    }
+
+    public List<Map.Entry<Coach, Integer>> getCountByCoaches() {
+        Map<Coach, Integer> unsortedListCoach = new HashMap<>();
+
+        for (Map<TimeOfDay, ArrayList<TrainingSession>> value : timetable.values()) {
+            for (List<TrainingSession> trainingSessions : value.values()) {
+                for (TrainingSession trainingSession : trainingSessions) {
+                    Coach coach = trainingSession.getCoach();
+                    unsortedListCoach.put(coach, unsortedListCoach.getOrDefault(coach, 0) + 1);
+                }
+            }
+        }
+
+
+        List<Map.Entry<Coach, Integer>> sortedListCoach = new ArrayList<>();
+
+        while (!unsortedListCoach.isEmpty()) {
+            int max = -1;
+            Coach coachWithMaxTraining = null;
+            for (Coach coach : unsortedListCoach.keySet()) {
+                int countTraining = unsortedListCoach.get(coach);
+                if (countTraining > max) {
+                    max = countTraining;
+                    coachWithMaxTraining = coach;
+                }
+            }
+            sortedListCoach.add(new AbstractMap.SimpleEntry<>(coachWithMaxTraining, max));
+            unsortedListCoach.remove(coachWithMaxTraining);
+        }
+        return sortedListCoach;
     }
 }

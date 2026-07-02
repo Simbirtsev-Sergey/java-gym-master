@@ -38,7 +38,6 @@ public class TimetableTest {
         Assertions.assertEquals(0, timetable.getTrainingSessionsForDayAndTime(DayOfWeek.TUESDAY, new TimeOfDay(13, 0)).size());
     }
 
-
     @Test
     void testGetTrainingSessionsForDayMultipleSessions() {
         Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
@@ -61,7 +60,6 @@ public class TimetableTest {
 
         // Проверить, что за четверг вернулось два занятия в правильном порядке: сначала в 13:00, потом в 20:00
     }
-
 
     @Test
     void shouldReturnOneMultipleSessionForMonday() {
@@ -157,4 +155,107 @@ public class TimetableTest {
                 new TimeOfDay(14, 0)).size());
     }
 
+    @Test
+    void shouldReturnTwoIdenticalMultipleSessionForMondayAt1400() {
+        Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
+        TrainingSession thursdayAdultTrainingSession = new TrainingSession(groupAdult, coach,
+                DayOfWeek.MONDAY, new TimeOfDay(20, 0));
+        timetable.addNewTrainingSession(thursdayAdultTrainingSession);
+
+        Group groupChild = new Group("Акробатика для детей", Age.CHILD, 60);
+        TrainingSession mondayChildTrainingSession = new TrainingSession(groupChild, coach,
+                DayOfWeek.MONDAY, new TimeOfDay(20, 0));
+        timetable.addNewTrainingSession(mondayChildTrainingSession);
+
+        Assertions.assertEquals(2, timetable.getTrainingSessionsForDayAndTime(DayOfWeek.MONDAY,
+                new TimeOfDay(20, 0)).size());
+
+    }
+
+    @Test
+    void shouldReturnAEmptyList() {
+        Assertions.assertEquals(new ArrayList<>(), timetable.getCountByCoaches());
+    }
+    // что значит необратимое использование параметризированного класса
+
+    @Test
+    void shouldReturnASortedListForTrainersWithDifferentTrainingSessionsAmounts() {
+        Coach headCoach = new Coach("Петров", "Иван", "Михайлович");
+        Coach assistantHeadCoach = new Coach("Иванов", "Сергей", "Георгиевич");
+
+        Group groupChild = new Group("Акробатика для детей", Age.CHILD, 60);
+
+        TrainingSession mondayChildTrainingSession = new TrainingSession(groupChild, coach,
+                DayOfWeek.MONDAY, new TimeOfDay(13, 0));
+        TrainingSession thursdayChildTrainingSession = new TrainingSession(groupChild, headCoach,
+                DayOfWeek.THURSDAY, new TimeOfDay(15, 0));
+        TrainingSession saturdayChildTrainingSession = new TrainingSession(groupChild, assistantHeadCoach,
+                DayOfWeek.SATURDAY, new TimeOfDay(10, 0));
+        TrainingSession fridayChildTrainingSession = new TrainingSession(groupChild, coach,
+                DayOfWeek.FRIDAY, new TimeOfDay(17, 0));
+        TrainingSession sundayChildTrainingSession = new TrainingSession(groupChild, assistantHeadCoach,
+                DayOfWeek.SUNDAY, new TimeOfDay(8, 0));
+        TrainingSession wednesdayChildTrainingSession = new TrainingSession(groupChild, coach,
+                DayOfWeek.WEDNESDAY, new TimeOfDay(19, 0));
+
+        timetable.addNewTrainingSession(mondayChildTrainingSession);
+        timetable.addNewTrainingSession(thursdayChildTrainingSession);
+        timetable.addNewTrainingSession(saturdayChildTrainingSession);
+        timetable.addNewTrainingSession(fridayChildTrainingSession);
+        timetable.addNewTrainingSession(wednesdayChildTrainingSession);
+        timetable.addNewTrainingSession(sundayChildTrainingSession);
+
+        List<Map.Entry<Coach, Integer>> sortedCoaches = timetable.getCountByCoaches();
+
+        Assertions.assertEquals(coach, sortedCoaches.getFirst().getKey());
+        Assertions.assertEquals(3, sortedCoaches.getFirst().getValue());
+
+        Assertions.assertEquals(assistantHeadCoach, sortedCoaches.get(1).getKey());
+        Assertions.assertEquals(2, sortedCoaches.get(1).getValue());
+
+        Assertions.assertEquals(headCoach, sortedCoaches.getLast().getKey());
+        Assertions.assertEquals(1, sortedCoaches.getLast().getValue());
+    }
+
+    @Test
+    void shouldReturnASortedListForTrainersWithSameTrainingSessionsAmounts() {
+        Coach headCoach = new Coach("Петров", "Иван", "Михайлович");
+        Coach assistantHeadCoach = new Coach("Иванов", "Сергей", "Георгиевич");
+
+        Group groupChild = new Group("Акробатика для детей", Age.CHILD, 60);
+
+        TrainingSession mondayChildTrainingSession = new TrainingSession(groupChild, coach,
+                DayOfWeek.MONDAY, new TimeOfDay(13, 0));
+        TrainingSession thursdayChildTrainingSession = new TrainingSession(groupChild, headCoach,
+                DayOfWeek.THURSDAY, new TimeOfDay(15, 0));
+        TrainingSession saturdayChildTrainingSession = new TrainingSession(groupChild, assistantHeadCoach,
+                DayOfWeek.SATURDAY, new TimeOfDay(10, 0));
+        TrainingSession fridayChildTrainingSession = new TrainingSession(groupChild, coach,
+                DayOfWeek.FRIDAY, new TimeOfDay(17, 0));
+        TrainingSession sundayChildTrainingSession = new TrainingSession(groupChild, assistantHeadCoach,
+                DayOfWeek.SUNDAY, new TimeOfDay(8, 0));
+        TrainingSession wednesdayChildTrainingSession = new TrainingSession(groupChild, coach,
+                DayOfWeek.WEDNESDAY, new TimeOfDay(19, 0));
+        TrainingSession tuesdayChildTrainingSession = new TrainingSession(groupChild, headCoach,
+                DayOfWeek.TUESDAY, new TimeOfDay(6, 0));
+
+        timetable.addNewTrainingSession(mondayChildTrainingSession);
+        timetable.addNewTrainingSession(thursdayChildTrainingSession);
+        timetable.addNewTrainingSession(saturdayChildTrainingSession);
+        timetable.addNewTrainingSession(fridayChildTrainingSession);
+        timetable.addNewTrainingSession(wednesdayChildTrainingSession);
+        timetable.addNewTrainingSession(sundayChildTrainingSession);
+        timetable.addNewTrainingSession(tuesdayChildTrainingSession);
+
+        List<Map.Entry<Coach, Integer>> sortedCoaches = timetable.getCountByCoaches();
+
+        Assertions.assertEquals(coach, sortedCoaches.getFirst().getKey());
+        Assertions.assertEquals(3, sortedCoaches.getFirst().getValue());
+
+        Assertions.assertEquals(2, sortedCoaches.get(1).getValue());
+        Assertions.assertEquals(2, sortedCoaches.getLast().getValue());
+
+        Assertions.assertEquals(3, sortedCoaches.size());
+
+    }
 }
