@@ -17,7 +17,7 @@ public class TimetableTest {
     }
 
     @Test
-    void shouldReturnOneTrainingSessionForMonday() {
+    void oneSessionForMonday() {
         Group group = new Group("Акробатика для детей", Age.CHILD, 60);
 
         TrainingSession singleTrainingSession = new TrainingSession(group, coach,
@@ -28,7 +28,7 @@ public class TimetableTest {
     }
 
     @Test
-    void shouldReturnZeroTrainingSessionForTuesday() {
+    void zeroSessionsForTuesday() {
         Group group = new Group("Акробатика для детей", Age.CHILD, 60);
 
         TrainingSession singleTrainingSession = new TrainingSession(group, coach,
@@ -39,7 +39,7 @@ public class TimetableTest {
     }
 
     @Test
-    void shouldReturnTrainingSessionsForDayMultipleSessions() {
+    void addMultipleSessions() {
         Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
         TrainingSession thursdayAdultTrainingSession = new TrainingSession(groupAdult, coach,
                 DayOfWeek.THURSDAY, new TimeOfDay(20, 0));
@@ -60,7 +60,7 @@ public class TimetableTest {
     }
 
     @Test
-    void shouldReturnOneMultipleSessionForMonday() {
+    void oneSessionForMondayWhenManyDays() {
         Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
         TrainingSession thursdayAdultTrainingSession = new TrainingSession(groupAdult, coach,
                 DayOfWeek.THURSDAY, new TimeOfDay(20, 0));
@@ -84,7 +84,7 @@ public class TimetableTest {
     }
 
     @Test
-    void shouldReturnZeroMultipleSessionForTuesday() {
+    void zeroSessionsForTuesdayWhenManyDays() {
         Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
         TrainingSession thursdayAdultTrainingSession = new TrainingSession(groupAdult, coach,
                 DayOfWeek.THURSDAY, new TimeOfDay(20, 0));
@@ -103,7 +103,7 @@ public class TimetableTest {
     }
 
     @Test
-    void shouldReturnTwoOrderlyMultipleSessionForThursday() {
+    void twoOrderedSessionsForThursday() {
         Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
         TrainingSession thursdayAdultTrainingSession = new TrainingSession(groupAdult, coach,
                 DayOfWeek.THURSDAY, new TimeOfDay(20, 0));
@@ -132,7 +132,7 @@ public class TimetableTest {
     }
 
     @Test
-    void shouldReturnOneMultipleSessionForMondayAt1300() {
+    void oneSessionForMondayAt1300() {
         Group group = new Group("Акробатика для детей", Age.CHILD, 60);
         TrainingSession singleTrainingSession = new TrainingSession(group, coach,
                 DayOfWeek.MONDAY, new TimeOfDay(13, 0));
@@ -143,7 +143,7 @@ public class TimetableTest {
     }
 
     @Test
-    void shouldReturnZeroMultipleSessionForMondayAt1400() {
+    void zeroSessionsForMondayAt1400() {
         Group group = new Group("Акробатика для детей", Age.CHILD, 60);
         TrainingSession singleTrainingSession = new TrainingSession(group, coach,
                 DayOfWeek.MONDAY, new TimeOfDay(13, 0));
@@ -154,7 +154,7 @@ public class TimetableTest {
     }
 
     @Test
-    void shouldReturnTwoIdenticalMultipleSessionForMondayAt1400() {
+    void twoSessionsAtSameTime() {
         Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
         TrainingSession thursdayAdultTrainingSession = new TrainingSession(groupAdult, coach,
                 DayOfWeek.MONDAY, new TimeOfDay(20, 0));
@@ -171,12 +171,12 @@ public class TimetableTest {
     }
 
     @Test
-    void shouldReturnAEmptyList() {
+    void emptyListWhenNoSessions() {
         Assertions.assertEquals(new ArrayList<>(), timetable.getCountByCoaches());
     }
 
     @Test
-    void shouldReturnASortedListForTrainersWithDifferentTrainingSessionsAmounts() {
+    void coachesSortedByCountDesc() {
         Coach headCoach = new Coach("Петров", "Иван", "Михайлович");
         Coach assistantHeadCoach = new Coach("Иванов", "Сергей", "Георгиевич");
 
@@ -215,7 +215,7 @@ public class TimetableTest {
     }
 
     @Test
-    void shouldReturnASortedListForTrainersWithSameTrainingSessionsAmounts() {
+    void coachesSortedWithTiedCounts() {
         Coach headCoach = new Coach("Петров", "Иван", "Михайлович");
         Coach assistantHeadCoach = new Coach("Иванов", "Сергей", "Георгиевич");
 
