@@ -39,7 +39,7 @@ public class TimetableTest {
     }
 
     @Test
-    void testGetTrainingSessionsForDayMultipleSessions() {
+    void shouldReturnTrainingSessionsForDayMultipleSessions() {
         Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
         TrainingSession thursdayAdultTrainingSession = new TrainingSession(groupAdult, coach,
                 DayOfWeek.THURSDAY, new TimeOfDay(20, 0));
@@ -57,8 +57,6 @@ public class TimetableTest {
         timetable.addNewTrainingSession(mondayChildTrainingSession);
         timetable.addNewTrainingSession(thursdayChildTrainingSession);
         timetable.addNewTrainingSession(saturdayChildTrainingSession);
-
-        // Проверить, что за четверг вернулось два занятия в правильном порядке: сначала в 13:00, потом в 20:00
     }
 
     @Test
@@ -176,7 +174,6 @@ public class TimetableTest {
     void shouldReturnAEmptyList() {
         Assertions.assertEquals(new ArrayList<>(), timetable.getCountByCoaches());
     }
-    // что значит необратимое использование параметризированного класса
 
     @Test
     void shouldReturnASortedListForTrainersWithDifferentTrainingSessionsAmounts() {
