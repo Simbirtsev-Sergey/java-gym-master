@@ -55,8 +55,12 @@ public class TimetableTest {
                 DayOfWeek.SATURDAY, new TimeOfDay(10, 0));
 
         timetable.addNewTrainingSession(mondayChildTrainingSession);
+        Assertions.assertEquals(1, timetable.getTrainingSessionsForDay(DayOfWeek.MONDAY).size());
         timetable.addNewTrainingSession(thursdayChildTrainingSession);
+        Assertions.assertEquals(2, timetable.getTrainingSessionsForDay(DayOfWeek.THURSDAY).size());
         timetable.addNewTrainingSession(saturdayChildTrainingSession);
+        Assertions.assertEquals(1, timetable.getTrainingSessionsForDay(DayOfWeek.SATURDAY).size());
+
     }
 
     @Test
