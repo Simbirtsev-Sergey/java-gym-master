@@ -64,7 +64,7 @@ public class TimetableTest {
     }
 
     @Test
-    void oneSessionForMondayWhenManyDays() {
+    void oneMondaySessionAmongDays() {
         Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
         TrainingSession thursdayAdultTrainingSession = new TrainingSession(groupAdult, coach,
                 DayOfWeek.THURSDAY, new TimeOfDay(20, 0));
@@ -88,7 +88,7 @@ public class TimetableTest {
     }
 
     @Test
-    void zeroSessionsForTuesdayWhenManyDays() {
+    void zeroTuesdaySessionAmongDays() {
         Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
         TrainingSession thursdayAdultTrainingSession = new TrainingSession(groupAdult, coach,
                 DayOfWeek.THURSDAY, new TimeOfDay(20, 0));
@@ -107,7 +107,7 @@ public class TimetableTest {
     }
 
     @Test
-    void twoOrderedSessionsForThursday() {
+    void thursdaySessionsOrdered() {
         Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
         TrainingSession thursdayAdultTrainingSession = new TrainingSession(groupAdult, coach,
                 DayOfWeek.THURSDAY, new TimeOfDay(20, 0));
@@ -147,7 +147,7 @@ public class TimetableTest {
     }
 
     @Test
-    void zeroSessionsForMondayAt1400() {
+    void mondaySessionAt1300() {
         Group group = new Group("Акробатика для детей", Age.CHILD, 60);
         TrainingSession singleTrainingSession = new TrainingSession(group, coach,
                 DayOfWeek.MONDAY, new TimeOfDay(13, 0));
@@ -158,7 +158,7 @@ public class TimetableTest {
     }
 
     @Test
-    void twoSessionsAtSameTime() {
+    void mondayNoSessionAt1400() {
         Group groupAdult = new Group("Акробатика для взрослых", Age.ADULT, 90);
         TrainingSession thursdayAdultTrainingSession = new TrainingSession(groupAdult, coach,
                 DayOfWeek.MONDAY, new TimeOfDay(20, 0));
